@@ -1,0 +1,201 @@
+// Импорт шрифтов и базовых стилей
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+// Переменные
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$text-color: #333;
+$background-color: #f4f4f4;
+$font-family: 'Roboto', sans-serif;
+
+// Базовые стили
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-family;
+  background-color: $background-color;
+  color: $text-color;
+  line-height: 1.6;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: darken($primary-color, 15%);
+  }
+}
+
+// Header
+.header {
+  background-color: $primary-color;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+
+      .nav-item {
+        .nav-link {
+          color: #fff;
+          background-color: grey;
+          font-weight: bold;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: darken($primary-color, 10%);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Main content
+main {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .main__index{
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+
+    label {
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+
+    select {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      transition: border-color 0.3s ease;
+      margin-right: 1rem;
+
+      &:focus {
+        border-color: $primary-color;
+        outline: none;
+      }
+    }
+  }
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: $primary-color;
+}
+
+ul {
+  list-style: none;
+
+  li {
+    background-color: #fff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    a {
+      font-weight: bold;
+    }
+
+    strong {
+      color: $secondary-color;
+    }
+  }
+}
+
+// Upload form
+form {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  p {
+    margin-bottom: 1rem;
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="file"] {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        border-color: $primary-color;
+        outline: none;
+      }
+    }
+  }
+
+  button {
+    background-color: $secondary-color;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+}
+// Адаптивность
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+
+    .nav {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .nav-list {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  }
+
+  main {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}

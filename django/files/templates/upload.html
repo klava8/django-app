@@ -1,0 +1,122 @@
+<!-- templates/upload.html -->
+{% extends 'base.html' %}
+
+{% block title %}Загрузка файла{% endblock %}
+
+{% block content %}
+    <h1>Загрузите файл</h1>
+    <form id="upload-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" id="file-input" name="file">
+        <button type="submit">Загрузить</button>
+    </form>
+
+    <div id="progress-bar-container" style="width: 100%; height: 20px; margin-top: 20px;"></div>
+
+    <script>
+        const chunkSize = 100 * 1024 * 1024;
+        const maxFileSize = 500 * 1024 * 1024;
+    
+        const progressBar = new ProgressBar.Line('#progress-bar-container', {
+            strokeWidth: 4,
+            easing: 'easeInOut',
+            duration: 1400,
+            color: '#FFEA82',
+            trailColor: '#eee',
+            trailWidth: 1,
+            svgStyle: {width: '100%', height: '100%'}
+        });
+    
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+    
+            if (file.size > maxFileSize) {
+                uploadFileInChunks(file);
+            } else {
+                uploadFile(file);
+            }
+        });
+    
+        function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+    
+            progressBar.animate(0);
+    
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '{% url 'upload_file' %}', true);
+            xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+    
+            xhr.upload.addEventListener('progress', function(event) {
+                if (event.lengthComputable) {
+                    const percentComplete = (event.loaded / event.total) * 100;
+                    progressBar.animate(percentComplete / 100);
+                }
+            });
+    
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    progressBar.animate(1); // Убедитесь, что прогресс-бар обновляется до 100%
+                    alert('Файл успешно загружен!');
+                    window.location.href = '{% url 'index' %}';
+                } else {
+                    alert('Ошибка при загрузке файла.');
+                }
+            };
+    
+            xhr.send(formData);
+        }
+    
+        function uploadFileInChunks(file) {
+            const totalChunks = Math.ceil(file.size / chunkSize);
+            let chunkNumber = 1;
+    
+            progressBar.animate(0);
+    
+            const uploadChunk = function() {
+                const start = (chunkNumber - 1) * chunkSize;
+                const end = Math.min(chunkNumber * chunkSize, file.size);
+                const chunk = file.slice(start, end);
+    
+                const formData = new FormData();
+                formData.append('chunk', chunk);
+                formData.append('chunk_number', chunkNumber);
+                formData.append('total_chunks', totalChunks);
+                formData.append('file_name', file.name);
+    
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '{% url 'upload_chunk' %}', true);
+                xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+    
+                xhr.upload.addEventListener('progress', function(event) {
+                    if (event.lengthComputable) {
+                        const percentComplete = ((chunkNumber - 1) + (event.loaded / event.total)) / totalChunks * 100;
+                        progressBar.animate(percentComplete / 100);
+                    }
+                });
+    
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        if (chunkNumber < totalChunks) {
+                            chunkNumber++;
+                            uploadChunk();
+                        } else {
+                            progressBar.animate(1); // Убедитесь, что прогресс-бар обновляется до 100%
+                            alert('Файл успешно загружен!');
+                            window.location.href = '{% url 'index' %}';
+                        }
+                    } else {
+                        alert('Ошибка при загрузке файла.');
+                    }
+                };
+    
+                xhr.send(formData);
+            };
+    
+            uploadChunk();
+        }
+    </script>
+{% endblock %}

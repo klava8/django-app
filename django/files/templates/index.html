@@ -1,0 +1,49 @@
+<!-- templates/index.html -->
+{% extends 'base.html' %}
+
+{% block title %}Список файлов{% endblock %}
+
+{% block content %}
+    <h1>Список файлов</h1>
+
+    <!-- Параметры сортировки -->
+    <div class="main__index">
+        <label for="sort_by">Сортировать по:</label>
+        <select id="sort_by" onchange="updateSorting()">
+            <option value="uploaded_at" {% if sort_by == 'uploaded_at' %}selected{% endif %}>Времени загрузки</option>
+            <option value="file_type" {% if sort_by == 'file_type' %}selected{% endif %}>Типу данных</option>
+            <option value="file" {% if sort_by == 'file' %}selected{% endif %}>Названию файла</option>
+        </select>
+
+        <label for="sort_order">Порядок:</label>
+        <select id="sort_order" onchange="updateSorting()">
+            <option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>По убыванию</option>
+            <option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>По возрастанию</option>
+        </select>
+    </div>
+
+    <!-- Список файлов -->
+    <ul>
+        {% for file in file_objects %}
+            <li>
+                <a href="{% url 'download_file' file.id %}">{{ file.file.name }}</a>
+                <br>
+                <strong>Загружено:</strong> {{ file.uploaded_at }}
+                <br>
+                <strong>Количество скачиваний:</strong> {{ file.download_count }}
+                <br>
+                <strong>Тип файла:</strong> {{ file.file_type }}
+                <br>
+                <a href="{% url 'delete_file' file.id %}" class="delete-button">Удалить</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function updateSorting() {
+            const sortBy = document.getElementById('sort_by').value;
+            const sortOrder = document.getElementById('sort_order').value;
+            window.location.href = `?sort_by=${sortBy}&sort_order=${sortOrder}`;
+        }
+    </script>
+{% endblock %}
