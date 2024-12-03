@@ -72,14 +72,16 @@ main {
   max-width: 1200px;
   margin: 0 auto;
 
-  .main__index{
+  .main__index {
     margin-bottom: 1rem;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     label {
       font-weight: bold;
       margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
     }
 
     select {
@@ -89,6 +91,7 @@ main {
       background-color: #f9f9f9;
       transition: border-color 0.3s ease;
       margin-right: 1rem;
+      margin-bottom: 0.5rem;
 
       &:focus {
         border-color: $primary-color;
@@ -175,6 +178,7 @@ form {
     }
   }
 }
+
 // Адаптивность
 @media (max-width: 768px) {
   .header {
@@ -197,5 +201,32 @@ form {
 
   h1 {
     font-size: 2rem;
+  }
+
+  .main__index {
+    flex-direction: column;
+    align-items: flex-start;
+
+    label, select {
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+
+  ul li {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  form {
+    padding: 1rem;
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+
+    button {
+      width: 100%;
+    }
   }
 }

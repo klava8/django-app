@@ -57,10 +57,12 @@ main .main__index {
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 main .main__index label {
   font-weight: bold;
   margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 main .main__index select {
   padding: 0.5rem;
@@ -69,6 +71,7 @@ main .main__index select {
   background-color: #f9f9f9;
   transition: border-color 0.3s ease;
   margin-right: 1rem;
+  margin-bottom: 0.5rem;
 }
 main .main__index select:focus {
   border-color: #3498db;
@@ -160,4 +163,25 @@ form button:hover {
   h1 {
     font-size: 2rem;
   }
-}/*# sourceMappingURL=main.css.map */
+  .main__index {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .main__index label, .main__index select {
+    width: 100%;
+    margin-right: 0;
+  }
+  ul li {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+  form {
+    padding: 1rem;
+  }
+  form p {
+    margin-bottom: 0.5rem;
+  }
+  form button {
+    width: 100%;
+  }
+}
